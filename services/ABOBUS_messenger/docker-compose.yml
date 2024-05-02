@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  abobus_msgr:
+    build: . 
+    cpus: 1
+    pids_limit: 32768
+    mem_limit: 1G
+    memswap_limit: 1G
+    ulimits:
+      nofile:
+        soft: 32768
+        hard: 32768
+    restart: unless-stopped
+    stop_grace_period: 3s
+    ports:
+      - "18484:31337"

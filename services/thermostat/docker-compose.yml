@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  thermostat:
+    container_name: thermostat
+    build: ./service/
+    restart: unless-stopped
+    environment:
+      - DBADDR=postgres://postgres:postgres@postgresql:5432/thermostat
+      - BINDADDR=0.0.0.0:8000
+      - LOGLEVEL=debug
+    healthcheck:
+      test: ["CMD", "wget", "-O", "-", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 800M
+        reservations:
+          cpus: '1'
+          memory: 400M
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    ports:
+      - 8000:8000
+  postgresql:
+    container_name: postgresql
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=thermostat
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "psql -h localhost -U postgres -c select 1 -d thermostat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 800M
+        reservations:
+          cpus: '1'
+          memory: 400M

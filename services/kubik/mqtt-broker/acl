@@ -1,0 +1,6 @@
+user admin
+topic #
+
+user device
+pattern read /kube_comms/%c
+pattern write /kube_comms/%c

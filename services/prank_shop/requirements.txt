@@ -1,0 +1,4 @@
+python-multipart
+uvicorn[standart]
+pyjwt
+fastapi

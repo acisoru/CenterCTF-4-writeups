@@ -1,0 +1,41 @@
+services:
+  kubik-mqtt-broker:
+    restart: unless-stopped
+    build:
+      context: mqtt-broker
+    ports:
+    - 1883:1883
+    networks:
+      app-network:
+        aliases:
+        - mqtt
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 500M
+  kubik-app:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - 3000:3000
+    depends_on:
+    - kubik-mqtt-broker
+    networks:
+    - app-network
+    volumes:
+    - ./db_volume:/appdir/flags_db
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 800M
+        reservations:
+          cpus: '1'
+          memory: 400M
+
+networks:
+  app-network:
+    driver: bridge

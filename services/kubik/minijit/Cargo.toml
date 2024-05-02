@@ -1,0 +1,15 @@
+[package]
+name = "minijit"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "minijit"
+crate-type = ["cdylib"]
+
+
+[dependencies]
+libc = "0.2.153"
+
+[features]
+debug_print_memory = []

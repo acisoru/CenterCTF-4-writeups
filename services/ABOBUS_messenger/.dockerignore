@@ -1,0 +1,4 @@
+target/
+src/secret_key
+Cargo.lock
+cats.db

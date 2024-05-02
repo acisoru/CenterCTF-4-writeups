@@ -1,0 +1,8 @@
+**/target
+target/
+target
+Cargo.lock
+vscode/
+secret_key
+cats.db
+*.code-workspace
